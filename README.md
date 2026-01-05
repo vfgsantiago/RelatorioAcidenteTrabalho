@@ -40,6 +40,23 @@ Transformando registros em prevenção.
 
 ---
 
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Linguagem:** C# (.NET)
+* **Backend/Frontend:** ASP.NET Core (MVC & Web API)
+* **Banco de Dados:** Oracle PLSQL
+* **Estilização:** Bootstrap / CSS3 / AJAX / JQUERY
+
+  ---
+
+## 🛠️ Metodoloias Utilizadas
+
+* **Arquitetura:** Camadas
+* **Padrão:** Repository Pattern
+  
+---
+
 ## 🔄 Fluxo de Dados
 
 ```mermaid
