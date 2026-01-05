@@ -1,0 +1,60 @@
+﻿@model PerguntaViewMOD
+@{
+    ViewData["Title"] = "Editar Pergunta";
+}
+
+<div class="container-fluid pt-5 px-5">
+    <div class="mb-4 row">
+        <div class="col-8 text-start">
+            <h3 class="text-gray-dark">
+                <i class="fas fa-plus-circle me-2"></i>Editar Pergunta
+            </h3>
+            <p class="text-gray">Local para edição de uma pergunta</p>
+        </div>
+        <div class="col-4 text-end">
+            <a asp-action="Index" asp-controller="Pergunta" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+                <i class="fas fa-chevron-left me-2"></i> Voltar
+            </a>
+        </div>
+    </div>
+    @using (Html.BeginForm("Editar", "Pergunta", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m.CdPergunta)
+        @Html.HiddenFor(m => m.SnAtivo)
+        <div class="card shadow-sm mb-4 rounded-3">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <p class="text-gray mb-4">Visualize e modifique o campo...</p>
+                        <label asp-for="TxPergunta" class="form-label text-gray-dark fw-semibold">
+                            Pergunta
+                        </label>
+                        <div class="input-group search-input-group shadow-sm">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="fas fa-question-circle text-muted"></i>
+                            </span>
+                            <input asp-for="TxPergunta"
+                                   class="form-control border-start-1"
+                                   placeholder="Informe a pergunta" />
+                        </div>
+                        <span asp-validation-for="TxPergunta" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="row mt-4">
+                        <div class="col-6 text-start">
+                            <a href="@Url.Action("Index")" class="btn btn-outline-gray btn-sm">
+                                <i class="fas fa-chevron-left me-1"></i> Cancelar
+                            </a>
+                        </div>
+                        <div class="col-6 text-end">
+                            <button type="submit" class="btn bg-primary text-white btn-sm">
+                                <i class="fas fa-save me-1"></i> Salvar Alterações
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

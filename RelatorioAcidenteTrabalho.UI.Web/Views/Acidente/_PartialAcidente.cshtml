@@ -1,0 +1,108 @@
+﻿<div class="bg-white shadow-sm rounded-3 p-4 mb-4">
+    <form id="formAcidente">
+        <div class="mb-3">
+            <h6 class="text-gray-dark">
+                <i class="fas fa-file-alt me-2"></i> Dados do Acidente
+            </h6>
+            <p class="text-gray mb-0">Preencha os dados principais do acidente.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-8 mb-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                        <i class="fas fa-text-height"></i>
+                    </span>
+                    <div class="form-floating form-floating-sm">
+                        <input type="text" id="TxTitulo" class="form-control" placeholder="Insira um título ao acidente" maxlength="200" required />
+                        <label for="TxTitulo" class="text-muted">Título do Acidente</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                        <i class="fas fa-calendar"></i>
+                    </span>
+                    <div class="form-floating form-floating-sm">
+                        <input type="date" id="DtAcidente" class="form-control" required />
+                        <label for="DtAcidente" class="text-muted">Data do Acidente</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                        <i class="fas fa-comments"></i>
+                    </span>
+                    <div class="form-floating form-floating-sm">
+                        <textarea type="text" id="TxObservacao" class="form-control" rows="3" maxlength="500" placeholder="Insira observações do acidente (opcional)"></textarea>
+                        <label for="TxObservacao" class="text-muted">Observação do Acidente (opcional)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form id="formAcidentado">
+        <div class="mb-3 mt-3">
+            <h6 class="text-gray-dark">
+                <i class="fas fa-user-injured me-2"></i> Dados do Acidentado
+            </h6>
+            <p class="text-gray mb-0">Preencha os principais dados do acidentado.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-8 mb-2 position-relative">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <div class="form-floating form-floating-sm flex-grow-1">
+                        <input type="text"
+                               id="buscarAcidentado"
+                               class="form-control"
+                               placeholder="Digite ao menos 3 letras do nome ou matrícula...">
+                        <label for="buscarAcidentado" class="text-muted">
+                            Buscar acidentado por nome ou matrícula
+                        </label>
+                    </div>
+                </div>
+                <div id="listaAcidentados"
+                     class="list-group shadow-sm border rounded-2 mt-1 position-absolute w-100"
+                     style="display:none; max-height: 250px; overflow-y:auto; z-index: 9999;">
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                        <i class="fas fa-phone"></i>
+                    </span>
+                    <div class="form-floating form-floating-sm">
+                        <input id="TxTelefone" class="form-control telefone-celular" placeholder="Telefone do acidentado" required />
+                        <label for="TxTelefone" class="text-muted">Telefone de Contato</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 mb-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                        <i class="fas fa-user-injured"></i>
+                    </span>
+                    <div class="form-floating form-floating-sm">
+                        <input type="text" id="TxNome" class="form-control" readonly />
+                        <label for="TxNome" class="text-muted">Nome Completo</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                        <i class="fas fa-hashtag"></i>
+                    </span>
+                    <div class="form-floating form-floating-sm">
+                        <input type="number" id="NrMatricula" class="form-control" readonly />
+                        <label for="NrMatricula" class="text-muted">Matrícula do Acidentado</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36804.6 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Banco", "Banco", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Armazenamento de Dados", "Armazenamento de Dados", "{369CB01D-A1A7-72D2-AABC-3F0945D148A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Telas", "Telas", "{F6581257-0C67-4B00-834F-DCA2C5EAA646}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelatorioAcidenteTrabalho.Model", "RelatorioAcidenteTrabalho.Model\RelatorioAcidenteTrabalho.Model.csproj", "{35CBEF98-E390-495A-8B60-17A833C69444}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelatorioAcidenteTrabalho.Repository", "RelatorioAcidenteTrabalho.Repository\RelatorioAcidenteTrabalho.Repository.csproj", "{499AF4CF-FF53-470F-AAA8-B4C34C68734A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelatorioAcidenteTrabalho.Data", "RelatorioAcidenteTrabalho.Data\RelatorioAcidenteTrabalho.Data.csproj", "{7B11A080-2712-46EE-835F-258544D121B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelatorioAcidenteTrabalho.UI.Web", "RelatorioAcidenteTrabalho.UI.Web\RelatorioAcidenteTrabalho.UI.Web.csproj", "{47A1902F-EF85-4B6F-BD54-1297A7EE7CD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35CBEF98-E390-495A-8B60-17A833C69444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35CBEF98-E390-495A-8B60-17A833C69444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35CBEF98-E390-495A-8B60-17A833C69444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35CBEF98-E390-495A-8B60-17A833C69444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{499AF4CF-FF53-470F-AAA8-B4C34C68734A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{499AF4CF-FF53-470F-AAA8-B4C34C68734A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{499AF4CF-FF53-470F-AAA8-B4C34C68734A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{499AF4CF-FF53-470F-AAA8-B4C34C68734A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B11A080-2712-46EE-835F-258544D121B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B11A080-2712-46EE-835F-258544D121B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B11A080-2712-46EE-835F-258544D121B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B11A080-2712-46EE-835F-258544D121B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A1902F-EF85-4B6F-BD54-1297A7EE7CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A1902F-EF85-4B6F-BD54-1297A7EE7CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A1902F-EF85-4B6F-BD54-1297A7EE7CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A1902F-EF85-4B6F-BD54-1297A7EE7CD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{35CBEF98-E390-495A-8B60-17A833C69444} = {369CB01D-A1A7-72D2-AABC-3F0945D148A2}
+		{499AF4CF-FF53-470F-AAA8-B4C34C68734A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{7B11A080-2712-46EE-835F-258544D121B1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{47A1902F-EF85-4B6F-BD54-1297A7EE7CD0} = {F6581257-0C67-4B00-834F-DCA2C5EAA646}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F22FC285-1113-4F1C-B2EE-E6E21712F848}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,111 @@
+﻿@model HomeViewMOD
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="hero-section text-white">
+    <div class="container text-start">
+        <h2 class="text-gray-dark">Relatório de Acidentes de Trabalho</h2>
+        <p>
+            Central para registro de acidentes de trabalho! Selecione o tipo de acidente abaixo...
+        </p>
+        <div class="row g-3 mt-4">
+            @foreach (var tipo in Model.ListaTipoAcidente)
+            {
+                {
+                    string cdTipoAcidente = FuncaoCriptografia.Criptografar(tipo.CdTipoAcidente.ToString());
+
+                    <div class="col-lg-4 col-md-6">
+                        <a asp-action="Index" asp-controller="Acidente" asp-area="" asp-route-t="@cdTipoAcidente"
+                           class="small-box bg-primary shadow-sm d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2>@tipo.TxTipoAcidente</h2>
+                                <small>@tipo.TxDescricao</small>
+                            </div>
+                            <i class="ms-2 fas fa-medkit"></i>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+<section class="container py-5 mt-4">
+    <h3 class="fw-bold mb-4">Métricas e Indicadores</h3>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="metric-card shadow-sm">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="metric-icon">
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                    </div>
+                    <div class="col-8 text-start">
+                        <div class="metric-value">@Model.QtdTotalAcidentes</div>
+                        <div class="metric-label">Acidentes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="metric-card shadow-sm">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="metric-icon">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                    </div>
+                    <div class="col-8 text-start">
+                        <div class="metric-value">@Model.QtdTotalAcidentados</div>
+                        <div class="metric-label">Acidentados</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="metric-card shadow-sm">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="metric-icon">
+                            <i class="fas fa-medkit"></i>
+                        </div>
+                    </div>
+                    <div class="col-8 text-start">
+                        <div class="metric-value">@Model.QtdTotalCategorias</div>
+                        <div class="metric-label">Categorias</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="container py-5 mt-2 mb-4">
+    <h3 class="fw-bold mb-4">Normas e Diretrizes</h3>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <a asp-action="Guia" asp-controller="Documento" asp-area=""
+               class="document-card card shadow-sm p-3 text-decoration-none text-dark">
+                <i class="fas fa-file-alt fa-2x mb-2"></i>
+                <h5>Guia de Registro</h5>
+                <p>Regras e padrões para registro de acidentes.</p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-action="Politica" asp-controller="Documento" asp-area=""
+               class="document-card card shadow-sm p-3 text-decoration-none text-dark">
+                <i class="fas fa-book fa-2x mb-2"></i>
+                <h5>Políticas</h5>
+                <p>Políticas para relato de acidentes.</p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-action="Contato" asp-controller="Documento" asp-area=""
+               class="document-card card shadow-sm p-3 text-decoration-none text-dark">
+                <i class="fas fa-envelope fa-2x mb-2"></i>
+                <h5>Contato</h5>
+                <p>Fale com a equipe de segurança do trabalho</p>
+            </a>
+        </div>
+    </div>
+</section>

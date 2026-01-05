@@ -1,0 +1,178 @@
+﻿@model AcidenteSucessoViewMOD
+@{
+    ViewData["Title"] = "Acidente Registrado com Sucesso";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+                    <i class="fas fa-check-circle fa-4x mb-2"></i>
+                    <h2 class="fw-bold mb-1">Acidente Registrado com Sucesso!</h2>
+                    <p class="mb-0 opacity-75">Todos os detalhes foram registrados e estão disponíveis para consulta</p>
+                </div>
+                <div class="card-body px-5 py-4">
+                    <div class="mb-5">
+                        <h5 class="fw-bold text-gray-dark mb-3"><i class="fas fa-info-circle me-2"></i>Detalhes do Acidente</h5>
+                        <div class="row g-2">
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-medkit text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Categoria do Acidente</h6>
+                                    </div>
+                                    <p class="mb-1 text-muted fs-6">@Model.TipoAcidente</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-exclamation-triangle text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Título do Acidente</h6>
+                                    </div>
+                                    <p class="mb-1 text-muted fs-6">@Model.TxTitulo</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-calendar-alt text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Data do Acidente</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.DtAcidente.ToString("dd/MM/yyyy")</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-user-injured text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Acidentado</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.TxNome</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-hashtag text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Matrícula</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.NrMatricula</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-phone text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Contato</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.TxTelefone</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-briefcase text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Setor</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.CentroCusto</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-briefcase text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Cargo</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.Cargo</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-building text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Unidade</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.Unidade</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="mb-5 mt-3">
+                        <h5 class="fw-bold text-gray-dark mb-3"><i class="fas fa-question-circle me-2"></i>Respostas Registradas</h5>
+                        <div class="accordion" id="respostasAccordion">
+                            @for (int i = 0; i < Model.ListaPerguntaResposta.Count; i++)
+                            {
+                                var pr = Model.ListaPerguntaResposta[i];
+                                var collapseId = $"collapse-{i}";
+                                var headingId = $"heading-{i}";
+                                <div class="accordion-item border-0 shadow-sm rounded-3 mb-2">
+                                    <h2 class="accordion-header" id="@headingId">
+                                        <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                                            @pr.Pergunta
+                                        </button>
+                                    </h2>
+                                    <div id="@collapseId" class="accordion-collapse collapse show" aria-labelledby="@headingId" data-bs-parent="#respostasAccordion">
+                                        <div class="accordion-body text-muted fs-6">
+                                            @pr.Resposta
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.TxObservacao))
+                    {
+                        <hr>
+                        <div class="mb-5 mt-3">
+                            <h6 class="fw-bold text-gray-dark mb-3"><i class="fas fa-sticky-note me-2"></i>Observações</h6>
+                            <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
+                                <p class="mb-0 text-muted fs-6">@Model.TxObservacao</p>
+                            </div>
+                        </div>
+                    }
+                    <hr>
+                    <div class="mb-5 mt-3">
+                        <h5 class="fw-bold text-gray-dark mb-3">
+                            <i class="fas fa-user-check me-2"></i>Informações do Registro
+                        </h5>
+                        <div class="row g-2">
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-user text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Usuário que Registrou</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.TxUsuarioRegistrou</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 h-100 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-clock text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Data do Registro</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.DtRegistro.ToString("dd/MM/yyyy HH:mm")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6 text-start">
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-outline-gray btn-sm shadow-lg px-3 py-2">
+                                <i class="fas fa-arrow-left me-2"></i> Voltar a Home
+                            </a>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a href="@Url.Action("Index", "Home")" class="btn bg-primary text-white btn-sm shadow-lg px-3 py-2">
+                                Novo Registro <i class="fas fa-plus ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,143 @@
+﻿@model PerguntaViewMOD
+@{
+    ViewData["Title"] = "Perguntas";
+}
+
+<div class="container-fluid px-5 pt-4 pb-3 mb-4">
+    <div class="mb-3">
+        <a asp-action="Index" asp-controller="Home" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+            <i class="fas fa-chevron-left me-2"></i> Voltar
+        </a>
+    </div>
+    <div class="bg-white rounded-3 mb-4 px-4 pt-5 pb-3 shadow-sm">
+        <div class="row mb-3">
+            <div class="col-8 text-start">
+                <h3 class="text-gray-dark">
+                    <i class="fas fa-question-circle me-2"></i>Perguntas
+                </h3>
+                <p class="text-gray">Local para gestão de todas as perguntas</p>
+            </div>
+            <div class="col-4 text-end">
+                <a href="@Url.Action("Cadastrar", "Pergunta")" class="btn bg-primary text-white shadow">
+                    <i class="fas fa-plus me-1"></i> Cadastrar Nova Pergunta
+                </a>
+            </div>
+        </div>
+        <form asp-action="Index" asp-controller="Perguna" asp-area="Admin" method="get"
+              class="container-fluid mb-4">
+            <label for="filtro" class="form-label fw-semibold text-gray">Código ou título</label>
+            <div class="input-group search-input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" name="filtro" id="filtro"
+                       class="form-control border-start-1"
+                       placeholder="Buscar por código ou título"
+                       value="@ViewBag.Filtro">
+                <button class="btn btn-gray text-white px-4" type="submit">
+                    <i class="fas fa-search me-2"></i>Buscar
+                </button>
+                <a href="@Url.Action("Index")" class="btn btn-outline-gray px-3">
+                    <i class="fas fa-times me-2"></i>Limpar
+                </a>
+            </div>
+        </form>
+    </div>
+    <div class="bg-white rounded-3 mb-5 px-4 pt-3 pb-3 shadow-sm">
+        <div class="mb-2">
+            <small class="text-gray">Total de perguntas: <strong>@Model.QtdTotalDeRegistros</strong></small>
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-body table-responsive p-0">
+                <table class="table table-striped table-hover text-nowrap">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="bg-primary text-white">Pergunta</th>
+                            <th class="bg-primary text-white text-center">Status</th>
+                            <th class="bg-primary text-white text-center">Última alteração</th>
+                            <th class="bg-primary text-white text-center">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ListaPergunta != null && Model.ListaPergunta.Count > 0)
+                        {
+                            foreach (var pergunta in Model.ListaPergunta)
+                            {
+                                var ativo = pergunta.SnAtivo == "S";
+                                <tr>
+                                    <td>@pergunta.TxPergunta</td>
+                                    <td class="text-center">
+                                        <div class="row">
+                                            <div class="col-6 text-end">
+                                                <span class="badge p-2 rounded-pill @(ativo ? "bg-success" : "bg-red")">
+                                                    @(ativo ? "Ativo" : "Inativo")
+                                                </span>
+                                            </div>
+                                            <div class="col-6 text-start">
+                                                <div class="form-check form-switch d-inline-block ms-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           onchange="enviarAlteracao(@pergunta.CdPergunta, this)"
+                                                           @(ativo ? "checked" : "") title="Alterar status" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">@((pergunta.DtAlteracao != null) ? pergunta.DtAlteracao.Value.ToString("dd/MM/yyyy  HH:mm") : "Não houve alterações")</td>
+                                    <td class="text-center">
+                                        <a data-bs-toggle="modal" data-bs-target="#modalConsultar_@pergunta.CdPergunta" title="Consultar categoria">
+                                            <i class="fas fa-search fa-lg text-green me-3"></i>
+                                        </a>
+                                        <a href="@Url.Action("Editar", "Pergunta", new { cdPergunta = pergunta.CdPergunta })">
+                                            <i class="fas fa-edit fa-lg text-orange"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @await Html.PartialAsync("_ModalConsultar", pergunta)
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    <i class="fas fa-info-circle me-2"></i>Nenhuma pergunta encontrada.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.TotalPaginas; i++)
+            {
+                <li class="page-item  @(i == Model.PaginaAtual ? "active" : "")">
+                    <a class="page-link bg-primary text-white border-0" href="@Url.Action("Index", new { pagina = i, filtro = ViewBag.Filtro })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+<script>
+    function enviarAlteracao(cdPergunta, checkbox) {
+        $.ajax({
+            url: '@Url.Action("AlterarStatus", "Pergunta")',
+            type: 'POST',
+            data: { cdPergunta: cdPergunta },
+            success: function () {
+                const badge = $(checkbox).closest('.row').find('.badge');
+                if (checkbox.checked) {
+                    badge.removeClass('bg-red').addClass('bg-success').text('Ativo');
+                } else {
+                    badge.removeClass('bg-success').addClass('bg-red').text('Inativo');
+                }
+                toastr.success("Status alterado com sucesso!");
+            },
+            error: function () {
+                toastr.error('Erro ao alterar status!');
+                checkbox.checked = !checkbox.checked;
+            }
+        });
+    }
+</script>

@@ -1,0 +1,52 @@
+﻿@model AcidenteViewMOD
+@{
+    ViewData["Title"] = "Acidentes Registrados";
+}
+<style>
+    .hover-scale:hover {
+        transform: translateY(-5px) scale(1.03);
+    }
+</style>
+<div class="container-fluid px-5 pt-3 pb-3 mb-4">
+    <div class="mb-3">
+        <a asp-action="Index" asp-controller="Home" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+            <i class="fas fa-chevron-left me-2"></i> Voltar
+        </a>
+    </div>
+    <div class="bg-white rounded-3 mb-4 px-4 pt-4 pb-0 shadow-sm">
+        <div class="row mb-3">
+            <div class="col-12 text-start">
+                <h3 class="text-gray-dark">
+                    <i class="fas fa-chart-line me-2"></i>Relatórios
+                </h3>
+                <p class="text-gray">Selecione um dos relatórios disponíveis para consulta detalhada.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <a asp-action="Index" asp-controller="Acidente" asp-area="Admin"
+               class="small-box bg-primary shadow-sm d-flex align-items-center justify-content-between h-100">
+                <div>
+                    <h2>Acidentes</h2>
+                    <small>
+                        Consulta detalhada de acidentes registrados.
+                    </small>
+                </div>
+                <i class="ms-2 fas fa-medkit"></i>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a asp-action="Index" asp-controller="Acidentado" asp-area="Admin"
+               class="small-box bg-primary shadow-sm d-flex align-items-center justify-content-between h-100">
+                <div>
+                    <h2>Acidentados</h2>
+                    <small>
+                        Consulta detalhada de acidentados.
+                    </small>
+                </div>
+                <i class="ms-2 fas fa-user-injured"></i>
+            </a>
+        </div>
+    </div>
+</div>

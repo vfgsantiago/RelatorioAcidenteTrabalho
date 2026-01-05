@@ -1,0 +1,134 @@
+﻿@model AcidentadoDetalheViewMOD
+@{
+    ViewData["Title"] = "Detalhes do Acidentado";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+                    <i class="fas fa-search fa-4x mb-2"></i>
+                    <h2 class="fw-bold mb-1">Consultar Detalhes do Acidentado</h2>
+                    <p class="mb-0 opacity-75">Todos os detalhes foram registrados e estão disponíveis para consulta</p>
+                </div>
+                <div class="card-body px-5 py-4">
+                    <div class="mb-5">
+                        <h5 class="fw-bold text-gray-dark mb-3"><i class="fas fa-info-circle me-2"></i>Detalhes do Acidentado</h5>
+                        <div class="row g-2">
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-user-injured text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Acidentado</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.Acidentado.TxNome</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-hashtag text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Matrícula</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.Acidentado.NrMatricula</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-phone text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Contato</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.Acidentado.TxTelefone</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-briefcase text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Setor (Unidade)</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.Acidentado.TxCentroCusto (@Model.Acidentado.TxUnidade)</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-1 shadow-sm rounded-4 p-3 bg-white">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-briefcase text-gray-dark me-2"></i>
+                                        <h6 class="mb-0 text-gray-dark">Função (Cargo)</h6>
+                                    </div>
+                                    <p class="mb-0 text-muted fs-6">@Model.Acidentado.TxFuncao (@Model.Acidentado.TxCargo)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="mb-5 mt-4">
+                        <h5 class="fw-bold text-gray-dark mb-3"><i class="fas fa-question-circle me-2"></i>Acidentes Registrados</h5>
+                        <div class="timeline">
+                            @if (!Model.ListaAcidentes.Any())
+                            {
+                                <div class="alert alert-secondary rounded-4 text-center">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Nenhum acidente registrado para este acidentado.
+                                </div>
+                            }
+                            else
+                            {
+                                foreach (var acidente in Model.ListaAcidentes.OrderByDescending(a => a.DtAcidente))
+                                {
+                                    <div class="timeline-item">
+                                        <div class="timeline-icon">
+                                            <i class="fas fa-medkit @((acidente.CdTipoAcidente == 1) ? "text-warning" : (acidente.CdTipoAcidente == 2) ? "text-danger" : "text-orange")"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-date">
+                                                <i class="far fa-calendar-alt me-1"></i>
+                                                @acidente.DtAcidente.ToString("dd/MM/yyyy")
+                                            </div>
+                                            @{
+                                                string cdAcidenteCriptografado = FuncaoCriptografia.Criptografar(acidente.CdAcidente.ToString());
+                                            }
+                                            <a asp-action="Detalhe" asp-controller="Acidente" asp-route-a="@cdAcidenteCriptografado" class="text-decoration-none">
+                                                <div class="timeline-card">
+                                                    <h6>
+                                                        @acidente.TxTipoAcidente
+                                                    </h6>
+                                                    <p class="mb-2 text-muted">
+                                                        <strong>Título:</strong> @acidente.TxTitulo
+                                                    </p>
+                                                    @if (acidente.TxObservacao != null)
+                                                    {
+                                                        <p class="text-muted">
+                                                            <strong>Observação:</strong><br />
+                                                            @acidente.TxObservacao
+                                                        </p>
+                                                    }
+                                                    <hr />
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-user me-1"></i>
+                                                        Registrado por <strong>@acidente.TxUsuarioRegistrou</strong><br />
+                                                        <i class="far fa-clock me-1"></i>
+                                                        @acidente.DtRegistro.ToString("dd/MM/yyyy HH:mm")
+                                                    </small>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 text-center">
+                            <a asp-action="Index" asp-controller="Acidentado" asp-area="Admin" class="btn bg-primary text-white btn-sm shadow-lg px-3 py-2">
+                                Acessar Acidentados <i class="fas fa-user-injured ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

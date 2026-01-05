@@ -1,0 +1,119 @@
+﻿@model FormularioViewMOD
+@{
+    ViewData["Title"] = "Hub de Parametrização";
+}
+<style>
+    .list-card {
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        margin-bottom: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e0e0e0; 
+    }
+</style>
+<div class="container-fluid px-5 pt-4 pb-3 mb-4">
+    <div class="mb-3">
+        <a asp-action="Index" asp-controller="Formulario" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+            <i class="fas fa-chevron-left me-2"></i> Voltar
+        </a>
+    </div>
+    <div class="bg-white rounded-3 mb-4 px-4 pt-4 pb-1 shadow-sm">
+        <div class="row mb-3">
+            <div class="col-12 text-start">
+                <h4 class="text-gray-dark">
+                    <i class="fas fa-cogs me-2"></i>Hub de Parametrização Categoria: @Model.TipoAcidente.TxTipoAcidente
+                </h4>
+                <p class="text-gray">Vincule perguntas à categoria e organize a ordem de exibição. Arraste as perguntas vinculadas para alterar a ordem.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="bg-white rounded-3 mb-4 px-3 pt-3 pb-3 shadow-sm">
+                <h5 class="text-gray-dark mb-3">Perguntas Disponíveis</h5>
+                <ul id="disponiveis" class="list-group">
+                    @foreach (var p in Model.PerguntasDisponiveis)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center list-card bg-light" data-id="@p.CdPergunta">
+                            <span class="flex-grow-1">@p.TxPergunta</span>
+                            <button class="btn bg-success-alt text-white btn-sm vincular">
+                                <i class="fas fa-link me-1"></i> Vincular
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="bg-white rounded-3 mb-4 px-3 pt-3 pb-3 shadow-sm">
+                <h5 class="text-gray-dark mb-3">Perguntas Vinculadas</h5>
+                <ul id="vinculadas" class="list-group">
+                    @foreach (var p in Model.PerguntasVinculadas)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center list-card bg-light" data-id="@p.CdPergunta" style="cursor: grab;">
+                            <span class="flex-grow-1">@p.TxPergunta</span>
+                            <button class="btn bg-danger-alt text-white btn-sm remover">
+                                <i class="fas fa-unlink me-1"></i> Remover
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        $("#vinculadas").sortable({
+            update: function (event, ui) {
+                var ordem = [];
+                $("#vinculadas li").each(function () { ordem.push($(this).data("id")); });
+
+                $.ajax({
+                    url: '@Url.Action("AtualizarOrdem", "Formulario")',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ cdTipoAcidente: @Model.TipoAcidente.CdTipoAcidente, ordem: ordem })
+                })
+                .done(function () { toastr.success("Ordem atualizada com sucesso!"); })
+                .fail(function () { toastr.error("Erro ao atualizar a ordem das perguntas."); });
+            }
+        });
+
+        $("#disponiveis").on("click", ".vincular", function () {
+            var li = $(this).closest("li");
+            var cdPergunta = li.data("id");
+
+            $.post('@Url.Action("Vincular", "Formulario")',
+                { cdTipoAcidente: @Model.TipoAcidente.CdTipoAcidente, cdPergunta: cdPergunta })
+                .done(function () {
+                    li.fadeOut(function () {
+                        li.appendTo("#vinculadas").fadeIn();
+                        li.find("button").removeClass("vincular bg-success-alt text-white").addClass("remover bg-danger-alt text-white").html('<i class="fas fa-unlink me-1"></i> Remover');
+                    });
+                    toastr.success("Pergunta vinculada com sucesso!");
+                })
+                .fail(function () { toastr.error("Erro ao vincular a pergunta."); });
+        });
+
+        $("#vinculadas").on("click", ".remover", function () {
+            var li = $(this).closest("li");
+            var cdPergunta = li.data("id");
+
+            $.post('@Url.Action("Remover", "Formulario")',
+                { cdTipoAcidente: @Model.TipoAcidente.CdTipoAcidente, cdPergunta: cdPergunta })
+                .done(function () {
+                    li.fadeOut(function () {
+                        li.appendTo("#disponiveis").fadeIn();
+                        li.find("button").removeClass("remover bg-danger-alt text-white").addClass("vincular bg-success-alt text-white").html('<i class="fas fa-link me-1"></i> Vincular');
+                    });
+                    toastr.success("Pergunta removida com sucesso!");
+                })
+                .fail(function () { toastr.error("Erro ao remover a pergunta."); });
+        });
+
+    });
+</script>
+

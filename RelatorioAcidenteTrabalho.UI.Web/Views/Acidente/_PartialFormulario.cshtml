@@ -1,0 +1,52 @@
+﻿@model AcidenteFormViewMOD
+
+<form id="formFormulario">
+    <div class="bg-white shadow-sm rounded-3 p-4 mb-4">
+        <div class="mb-3">
+            <h6 class="text-gray-dark">
+                <i class="fas fa-question-circle me-2"></i>Formulário de Registro
+            </h6>
+            <p class="text-gray mb-0">Responda a(s) pergunta(s) abaixo e em seguida clique em "Enviar Registro".</p>
+        </div>
+        @foreach (var p in Model.ListaPergunta)
+        {
+            <div class="card shadow-sm mb-3 mt-3 pergunta-item" data-id="@p.CdPerguntaTipoAcidente">
+                <div class="card-header bg-primary-alt border-bottom">
+                    <span class="fw-bold text-white">
+                        <i class="fas fa-comment-dots me-2"></i>
+                        @p.TxPergunta
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">
+                            <i class="fas fa-pencil-alt"></i>
+                        </span>
+
+                        <div class="form-floating form-floating-sm flex-grow-1">
+                            <textarea class="form-control"
+                                  rows="5"
+                                  maxlength="3999"
+                                  required
+                                  placeholder="Digite sua resposta detalhada aqui..."
+                                  style="height: 120px"></textarea>
+                            <label class="text-muted">Resposta</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-5 text-start">
+            <a asp-action="Index" asp-controller="Home" asp-area="" class="btn btn-outline-gray">
+                <i class="fas fa-chevron-left me-2"></i>Voltar
+            </a> 
+        </div>
+        <div class="col-7 text-end">
+            <button id="btnEnviar" class="btn bg-primary-alt text-white">
+                Enviar Registro<i class="fas fa-paper-plane ms-2"></i>
+            </button>
+        </div>
+    </div>
+</form>

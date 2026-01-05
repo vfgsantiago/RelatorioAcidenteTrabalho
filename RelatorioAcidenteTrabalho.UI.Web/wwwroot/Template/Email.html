@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Registro Premium</title>
+    <style>
+        body, table, td, p {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        img {
+            display: block;
+            border: 0;
+            outline: none;
+            text-decoration: none;
+        }
+        a {
+            color: #004e4c;
+            text-decoration: none;
+        }
+        .email-container {
+            width: 100%;
+            background-color: #f0f2f5;
+            padding: 20px 20px 20px 20px;
+        }
+        .email-content {
+            width: 600px;
+            background-color: #ffffff;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .email-header {
+            background: linear-gradient(90deg, #004e4c, #00695c);
+            color: #ffffff;
+            text-align: center;
+            padding: 30px 20px;
+        }
+            .email-header h1 {
+                font-size: 26px;
+                margin: 0;
+                font-weight: bold;
+                letter-spacing: 0.5px;
+            }
+        .email-logo {
+            text-align: center;
+            padding: 25px;
+        }
+        .email-body {
+            padding: 25px 30px;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+            .email-body p {
+                margin-bottom: 15px;
+            }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+            .details-table th, .details-table td {
+                padding: 12px 15px;
+                text-align: left;
+                border-bottom: 1px solid #e6e6e6;
+            }
+            .details-table th {
+                background-color: #f4f4f9;
+                color: #411564;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .details-table td {
+                background-color: #ffffff;
+                color: #333333;
+            }
+        .qa-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .qa-card-header {
+            padding: 12px 15px;
+            background-color: #f4f4f9;
+            font-weight: bold;
+            color: #411564;
+            font-size: 15px;
+        }
+        .qa-card-body {
+            padding: 12px 15px;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .email-footer {
+            text-align: center;
+            font-size: 12px;
+            color: #666666;
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .btn-action {
+            display: inline-block;
+            background-color: #004e4c;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-content">
+            <div class="email-header">
+                <h1>{TITULO_EMAIL}</h1>
+            </div>
+            <div class="email-logo">
+                <img src="logo.png" alt="Logo" width="160">
+            </div>
+            <div class="email-body">
+                <p>Olá <strong>{NOME}</strong>,</p>
+                <p>{TEXTO}</p>
+                <table class="details-table">
+                    <tr>
+                        <th colspan="2">Detalhes do Registro</th>
+                    </tr>
+                    {LISTA_INFORMACOES}
+                </table>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;">
+                    <tr>
+                        <th colspan="2">Perguntas e Respostas</th>
+                    </tr>
+                    {LISTA_PERGUNTAS}
+                </table>
+            </div>
+            <div class="email-footer">
+                © Vinicius Santiago | {ANO_ATUAL}<br>
+                Este e-mail foi gerado automaticamente. Não responda.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

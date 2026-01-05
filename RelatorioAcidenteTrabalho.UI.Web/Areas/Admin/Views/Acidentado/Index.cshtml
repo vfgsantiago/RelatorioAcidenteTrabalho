@@ -1,0 +1,327 @@
+﻿@model AcidentadoViewMOD
+@{
+    ViewData["Title"] = "Acidentados Registrados";
+}
+
+<div class="container-fluid px-5 pt-3 pb-3 mb-4">
+    <div class="row mb-3">
+        <div class="col-12 text-start">
+            <a asp-action="Index" asp-controller="Home" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+                <i class="fas fa-home me-2"></i> Home
+            </a>       
+            <a asp-action="Index" asp-controller="Relatorio" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+                <i class="fas fa-chart-line me-2"></i>Relatórios
+            </a>  
+        </div>
+    </div>
+    <div class="bg-white rounded-3 mb-4 px-4 pt-4 pb-2 shadow-sm">
+        <form asp-action="Index" asp-controller="Acidentado" asp-area="Admin" method="get" class="container-fluid mb-4">
+        <div class="row mb-3">
+            <div class="col-8 text-start">
+                <h3 class="text-gray-dark">
+                    <i class="fas fa-medkit me-2"></i>Acidentados Registrados
+                </h3>
+                <p class="text-gray">Consulta, filtros e paginação dos acidentados registrados.</p>
+            </div>
+            <div class="col-4 mt-3 text-end">
+                  <button class="btn bg-primary text-white btn-sm px-4 py-1" type="submit">
+                      <i class="fas fa-search me-2"></i>Buscar
+                  </button>
+                  <a href="@Url.Action("Index","Acidentado", new { area = "Admin" })"
+                     class="btn btn-outline-green btn-sm px-4 py-1">
+                      <i class="fas fa-times me-2"></i>Limpar
+                  </a>
+              </div>
+        </div>
+        <div class="row g-2">
+           <div class="col-md-4 position-relative">
+               <div class="input-group input-group-sm shadow-sm">
+                   <span class="input-group-text bg-white">
+                       <i class="fas fa-user-injured"></i>
+                   </span>
+                   <div class="form-floating form-floating-sm flex-grow-1">
+                       <input type="text"
+                              id="buscarAcidentado"
+                              class="form-control"
+                              placeholder="Digite nome ou matrícula..."
+                              value="@(ViewBag.AcidentadoNome ?? "")">
+                       <label class="text-muted">Acidentado</label>
+                   </div>
+                   <input type="hidden" id="cdAcidentado" name="cdAcidentado"
+                          value="@ViewBag.Acidentado" />
+               </div>
+               <div id="listaAcidentados"
+                    class="list-group shadow-sm border rounded-2 mt-1 position-absolute w-100"
+                    style="display:none; max-height:250px; overflow-y:auto; z-index:9999;">
+               </div>
+           </div>
+           <div class="col-md-4 position-relative">
+               <div class="input-group input-group-sm shadow-sm">
+                   <span class="input-group-text bg-white">
+                       <i class="fas fa-sitemap"></i>
+                   </span>
+                   <div class="form-floating form-floating-sm flex-grow-1">
+                       <input type="text"
+                              id="buscarCentroCustoUnidade"
+                              class="form-control"
+                              placeholder="Digite o setor ou unidade..."
+                              value="@(ViewBag.CentroCustoUnidadeNome ?? "")">
+                       <label class="text-muted">Setor (Unidade)</label>
+                   </div>
+                   <input type="hidden" id="cdCentroCusto" name="cdCentroCusto"
+                          value="@ViewBag.CentroCustoUnidade" />
+               </div>
+               <div id="listaCentroCustoUnidade"
+                    class="list-group shadow-sm border rounded-2 mt-1 position-absolute w-100"
+                    style="display:none; max-height:250px; overflow-y:auto; z-index:9999;">
+               </div>
+           </div>
+            <div class="col-md-4 position-relative">
+               <div class="input-group input-group-sm shadow-sm">
+                   <span class="input-group-text bg-white">
+                       <i class="fas fa-user-tie"></i>
+                   </span>
+                   <div class="form-floating form-floating-sm flex-grow-1">
+                       <input type="text"
+                              id="buscarFuncaoCargo"
+                              class="form-control"
+                              placeholder="Digite a função ou cargo..."
+                              value="@(ViewBag.FuncaoCargoNome ?? "")">
+                       <label class="text-muted">Função (Cargo)</label>
+                   </div>
+                   <input type="hidden" id="cdFuncao" name="cdFuncao"
+                          value="@ViewBag.FuncaoCargo" />
+               </div>
+               <div id="listaFuncaoCargo"
+                    class="list-group shadow-sm border rounded-2 mt-1 position-absolute w-100"
+                    style="display:none; max-height:250px; overflow-y:auto; z-index:9999;">
+               </div>
+           </div>
+           </div>
+        </form>
+    </div>
+    <div class="bg-white rounded-3 mb-5 px-4 pt-3 pb-2 shadow-sm">
+        <div class="mb-2">
+            <small class="text-gray">Total de acidentados: <strong>@Model.Paginacao.TotalItens</strong></small>
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-body table-responsive p-0">
+                <table class="table table-striped table-hover text-nowrap">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="bg-primary text-white">Acidentado</th>
+                            <th class="bg-primary text-white">Matrícula</th>
+                            <th class="bg-primary text-white">Setor (Unidade)</th>
+                            <th class="bg-primary text-white">Função</th>
+                            <th class="bg-primary text-white">Acidentes</th>
+                            <th class="bg-primary text-white text-center">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Lista != null && Model.Lista.Any())
+                        {
+                            foreach (var item in Model.Lista)
+                            {
+                                <tr>
+                                    <td>@item.TxNome</td>
+                                    <td>@item.NrMatricula</td>
+                                    <td>@item.TxCentroCusto (@item.TxUnidade)</td>
+                                    <td>@item.TxFuncao</td>
+                                    <td>@item.QtdAcidente</td>
+                                    <td class="text-center">
+                                        @{
+                                            string cdAcidentadoCriptografado = FuncaoCriptografia.Criptografar(item.CdAcidentado.ToString());
+                                        }
+                                        <a asp-action="Detalhe" asp-controller="Acidentado" asp-area="Admin"
+                                           asp-route-u="@cdAcidentadoCriptografado">
+                                            <i class="fas fa-search fa-lg text-green me-3" title="Ver detalhes"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="fas fa-info-circle me-2"></i>Nenhum acidentado encontrado.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.Paginacao.TotalPaginas; i++)
+            {
+                <li class="page-item @(i == Model.Paginacao.PaginaAtual ? "active" : "")">
+                    <a class="page-link bg-primary text-white border-0"
+                       href="@Url.Action("Index", new {
+                           pagina = i,
+                           cdAcidentado = ViewBag.Acidentado,
+                           cdCentroCusto = ViewBag.CentroCusto,
+                           cdFuncao = ViewBag.Funcao
+                       })">
+                        @i
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        // ACIDENTADO
+        $(document).on("keyup", "#buscarAcidentado", function () {
+            let termo = $(this).val();
+    
+            if (termo.length < 3) {
+                $("#listaAcidentados").hide();
+                return;
+            }
+            $.get("@Url.Action("BuscarAcidentados", "Acidentado", new { area = "Admin" })",
+                { termo: termo },
+                function (resp) {
+                    if (!resp.sucesso || resp.acidentados.length === 0) {
+                        $("#listaAcidentados").hide();
+                        return;
+                    }
+    
+                    let html = "";
+                    resp.acidentados.forEach(a => {
+                        html += `
+                            <a class="list-group-item list-group-item-action"
+                               data-id="${a.cdAcidentado}"
+                               data-nome="${a.txNome}"
+                               data-mat="${a.nrMatricula}">
+                                <strong>${a.txNome}</strong><br>
+                                <small>Matrícula: ${a.nrMatricula}</small>
+                            </a>`;
+                    });
+    
+                    $("#listaAcidentados").html(html).fadeIn(120);
+                }
+            );
+        });
+        $(document).on("click", "#listaAcidentados .list-group-item", function () {
+    
+            let id = $(this).data("id");
+            let nome = $(this).data("nome");
+            let mat = $(this).data("mat");
+    
+            $("#cdAcidentado").val(id);
+            $("#buscarAcidentado").val(nome + " (" + mat + ")");
+    
+            $("#listaAcidentados").fadeOut(100);
+        });
+        $(document).click(function (e) {
+            if (!$(e.target).closest("#buscarAcidentado, #listaAcidentados").length) {
+                $("#listaAcidentados").fadeOut(100);
+            }
+        });
+
+        // CENTRO DE CUSTO
+        $(document).on("keyup", "#buscarCentroCustoUnidade", function () {
+            let termo = $(this).val();
+    
+            if (termo.length < 3) {
+                $("#listaCentroCustoUnidade").hide();
+                return;
+            }
+            $.get("@Url.Action("BuscarCentroCustoUnidade", "Acidentado", new { area = "Admin" })",
+                { termo: termo },
+                function (resp) {
+                    if (!resp.sucesso || resp.centroCusto.length === 0) {
+                        $("#listaCentroCustoUnidade").hide();
+                        return;
+                    }
+    
+                    let html = "";
+                    resp.centroCusto.forEach(a => {
+                        html += `
+                            <a class="list-group-item list-group-item-action"
+                               data-id="${a.cdCentroCusto}"
+                               data-nome="${a.noCentroCusto}"
+                               data-un="${a.noUnidade}">
+                                <strong>${a.noCentroCusto}</strong><br>
+                                <small>Unidade: ${a.noUnidade}</small>
+                            </a>`;
+                    });
+    
+                    $("#listaCentroCustoUnidade").html(html).fadeIn(120);
+                }
+            );
+        });
+        $(document).on("click", "#listaCentroCustoUnidade .list-group-item", function () {
+    
+            let id = $(this).data("id");
+            let nome = $(this).data("nome");
+            let un = $(this).data("un");
+    
+            $("#cdCentroCusto").val(id);
+            $("#buscarCentroCustoUnidade").val(nome + " (" + un + ")");
+    
+            $("#listaCentroCustoUnidade").fadeOut(100);
+        });
+        $(document).click(function (e) {
+            if (!$(e.target).closest("#buscarCentroCustoUnidade, #listaCentroCustoUnidade").length) {
+                $("#listaCentroCustoUnidade").fadeOut(100);
+            }
+        });
+
+        // FUNÇÃO
+        $(document).on("keyup", "#buscarFuncaoCargo", function () {
+            let termo = $(this).val();
+    
+            if (termo.length < 3) {
+                $("#listaFuncaoCargo").hide();
+                return;
+            }
+            $.get("@Url.Action("BuscarFuncaoCargo", "Acidentado", new { area = "Admin" })",
+                { termo: termo },
+                function (resp) {
+                    if (!resp.sucesso || resp.funcao.length === 0) {
+                        $("#listaFuncaoCargo").hide();
+                        return;
+                    }
+    
+                    let html = "";
+                    resp.funcao.forEach(a => {
+                        html += `
+                            <a class="list-group-item list-group-item-action"
+                               data-id="${a.cdFuncao}"
+                               data-nome="${a.nmFuncao}"
+                               data-ca="${a.nmCargo}">
+                                <strong>${a.nmFuncao}</strong><br>
+                                <small>Cargo: ${a.nmCargo}</small>
+                            </a>`;
+                    });
+    
+                    $("#listaFuncaoCargo").html(html).fadeIn(120);
+                }
+            );
+        });
+        $(document).on("click", "#listaFuncaoCargo .list-group-item", function () {
+    
+            let id = $(this).data("id");
+            let nome = $(this).data("nome");
+            let ca = $(this).data("ca");
+    
+            $("#cdFuncao").val(id);
+            $("#buscarFuncaoCargo").val(nome + " (" + ca + ")");
+    
+            $("#listaFuncaoCargo").fadeOut(100);
+        });
+        $(document).click(function (e) {
+            if (!$(e.target).closest("#buscarFuncaoCargo, #listaFuncaoCargo").length) {
+                $("#listaFuncaoCargo").fadeOut(100);
+            }
+        });
+    });
+    </script>
+}

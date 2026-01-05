@@ -1,0 +1,263 @@
+﻿@model AcidenteFormViewMOD
+@{
+    ViewData["Title"] = "Registro de Acidente";
+}
+
+<div class="container-fluid px-5 pt-3 pb-5">
+    <div class="mb-3">
+        <a asp-action="Index" asp-controller="Home" asp-area="" class="btn btn-xs px-3 py-1 btn-outline-gray">
+            <i class="fas fa-chevron-left me-2"></i> Voltar
+        </a>
+    </div>
+    <div class="bg-white shadow-sm rounded-3 p-4 mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-7 col-12 text-start">
+                <h4 class="text-gray-dark mb-1">
+                    <i class="fas fa-medkit me-2"></i> Registro de Acidente de Trabalho
+                </h4>
+                <p class="text-gray mb-0">Preencha os dados abaixo para registrar o acidente.</p>
+            </div>
+            <div class="col-md-5 col-12 text-end">
+                <h3 class="badge bg-primary text-white px-4 py-2 fs-5">@Model.TipoAcidente.TxTipoAcidente</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="areaLogin" class="col-md-4 col-sm-12">
+            @await Html.PartialAsync("_PartialLogin")
+        </div>
+        <div id="areaAcidente" class="col-md-8 col-sm-12" style="display:none;">
+            @await Html.PartialAsync("_PartialAcidente")
+        </div>
+        <div id="areaFormulario" class="col-md-12 col-sm-12" style="display:none;">
+            @await Html.PartialAsync("_PartialFormulario", Model)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let usuarioValidado = null;
+
+            // VALIDAÇÃO DE LOGIN
+            $(document).on("click", "#btnValidar", function () {
+                const btn = $(this);
+                const login = $("#TxLogin").val();
+                const senha = $("#TxSenha").val();
+
+                if (!login || !senha) {
+                    toastr.warning("Informe login e senha para continuar.");
+                    return;
+                }
+
+                // Desabilita o botão e mostra o spinner
+                btn.prop("disabled", true).html("<i class='fas fa-spinner fa-spin me-2'></i> Validando...");
+
+                $.post("@Url.Action("ValidarLogin", "Acidente")",
+                    { login: login, senha: senha },
+                    function (resp) {
+                        btn.prop("disabled", false).html("<i class='fas fa-check-circle me-2'></i> Validar Colaborador");
+
+                        if (!resp.sucesso) {
+                            toastr.error(resp.mensagem || "Erro na validação do login.");
+                            return;
+                        }
+
+                        // Armazena os dados do usuário
+                        usuarioValidado = resp.usuario;
+
+                        // Atualiza a área de dados do usuário
+                        $("#dadosUsuario").html(`
+                            <div class="alert bg-light p-3" role="alert">
+                                <h6 class="alert-heading text-green mb-2">
+                                    <i class="fas fa-check-circle me-2"></i> Colaborador Validado com Sucesso!
+                                </h6>
+                                <hr class="my-1">
+                                <p class="mb-0 small">
+                                    <i class="fas fa-user me-2"></i>
+                                    <strong>Colaborador:</strong> ${usuarioValidado.nmUsuario}
+                                </p>
+                                <p class="mb-0 small">
+                                    <i class="fas fa-id-card me-2"></i>
+                                    <strong>Matrícula:</strong> ${usuarioValidado.nrMatricula}
+                                </p>
+                            </div>
+                        `);
+                         $("#contentBtnValidar").html(`
+                            <button class="btn bg-primary text-white w-100">
+                                <i class="fas fa-thumbs-up me-2"></i> Validado
+                            </button>
+                         `);
+
+                        // Exibe as áreas do formulário
+                        $("#areaAcidente").fadeIn();
+                        $("#areaFormulario").fadeIn();
+                        toastr.success("Usuário validado com sucesso! Preencha o restante do formulário.");
+                    }
+                ).fail(function () {
+                    btn.prop("disabled", false).html("<i class='fas fa-check-circle me-2'></i> Validar Colaborador");
+                    toastr.error("Falha na comunicação com o servidor.");
+                });
+            });
+
+            // AUTOCOMPLETE ACIDENTADO
+            $(document).on("keyup", "#buscarAcidentado", function () {
+                let termo = $(this).val();
+
+                if (termo.length < 3) {
+                    $("#listaAcidentados").hide();
+                    return;
+                }
+
+                $.get("@Url.Action("BuscarUsuarios", "Acidente")", { termo: termo }, function (resp) {
+
+                    if (!resp.sucesso || resp.usuarios.length === 0) {
+                        $("#listaAcidentados").hide();
+                        return;
+                    }
+
+                    let html = "";
+                    resp.usuarios.forEach(u => {
+                        html += `
+                            <a class="list-group-item list-group-item-action"
+                               data-cd="${u.cdUsuario}"
+                               data-nome="${u.nmUsuario}"
+                               data-mat="${u.nrMatricula}">
+                               <strong>${u.nmUsuario}</strong><br>
+                               <small>Matrícula: ${u.nrMatricula}</small>
+                            </a>`;
+                    });
+
+                    $("#listaAcidentados").html(html).fadeIn(120);
+                });
+            });
+
+            // SELECIONAR USUÁRIO
+            $(document).on("click", "#listaAcidentados .list-group-item", function () {
+                $("#NrMatricula").val($(this).data("mat"));
+                $("#TxNome").val($(this).data("nome"));
+
+                $("#listaAcidentados").fadeOut(100);
+                $("#buscarAcidentado").val($(this).data("nome"));
+
+                $("#TxNome").data("cdUsuario", $(this).data("cd"));
+
+                toastr.success("Acidentado selecionado com sucesso!");
+            });
+
+            // FORMULÁRIO DE ENVIO
+            $("#formFormulario").submit(function (e) {
+                e.preventDefault();
+                const btnEnviar = $("#btnEnviar");
+
+                //Garantir usuário logado
+                if (!usuarioValidado) {
+                    toastr.warning("É necessário validar o login do colaborador primeiro.");
+                    return;
+                }
+
+                //Validar campos do acidente
+                let titulo = $("#TxTitulo").val().trim();
+                if (titulo.length === 0) {
+                    toastr.warning("O título do acidente é obrigatório.");
+                    $("#TxTitulo").focus();
+                    return;
+                }
+
+                let dataAcidente = $("#DtAcidente").val();
+                if (!dataAcidente) {
+                    toastr.warning("A data do acidente é obrigatória.");
+                    $("#DtAcidente").focus();
+                    return;
+                }
+                let hoje = new Date().toISOString().split('T')[0];
+                if (dataAcidente > hoje) {
+                    toastr.warning("A data do acidente não pode ser futura.");
+                    $("#DtAcidente").focus();
+                    return;
+                }
+
+                let matriculaAcidentado = $("#NrMatricula").val().trim();
+                let nomeAcidentado = $("#TxNome").val().trim();
+                if (nomeAcidentado.length === 0 || matriculaAcidentado.length === 0) {
+                    toastr.warning("É necessário selecionar o acidentado.");
+                    $("#buscarAcidentado").focus();
+                    return;
+                }
+
+                let telefone = $("#TxTelefone").val().trim();
+                if (telefone.length === 0) {
+                    toastr.warning("O telefone do acidentado é obrigatório.");
+                    $("#TxTelefone").focus();
+                    return;
+                }
+
+                //Validação Respostas
+                let respostas = [];
+                let houveErro = false;
+                $(".pergunta-item").each(function () {
+                    const resposta = $(this).find("textarea, input, select").val().trim();
+                    if (resposta.length === 0) {
+                        houveErro = true;
+                        $(this).addClass("border border-danger");
+                    } else {
+                        $(this).removeClass("border border-danger");
+                    }
+                    respostas.push({
+                        cdPerguntaTipoAcidente: $(this).data("id"),
+                        txResposta: resposta
+                    });
+                });
+                if (houveErro) {
+                    toastr.error("Responda todas as perguntas antes de enviar.");
+                    return;
+                }
+
+                //Payload e Envio
+                let payload = {
+                    CdTipoAcidente: @(Model.TipoAcidente?.CdTipoAcidente ?? 0),
+                    CdUsuario: usuarioValidado.cdUsuario,
+                    TxTitulo: titulo,
+                    TxObservacao: $("#TxObservacao").val(),
+                    DtAcidente: dataAcidente,
+                    TxNome: nomeAcidentado,
+                    NrMatricula: matriculaAcidentado,
+                    TxTelefone: telefone,
+                    ListaResposta: respostas
+                };
+                btnEnviar.prop("disabled", true).html("<i class='fas fa-spinner fa-spin me-2'></i> Enviando...");
+                $.ajax({
+                    url: "@Url.Action("Enviar", "Acidente")",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(payload)
+                })
+                .done(function (response) {
+                    if (response.success) {
+                        toastr.success("Acidente registrado com sucesso!");
+                        window.location.href = "@Url.Action("Sucesso", "Acidente")" + "?a=" + response.a;
+                    } else {
+                        toastr.error("Erro ao registrar acidente: " + response.message);
+                    }
+                })
+                .fail(function () {
+                    toastr.error("Erro ao enviar o formulário. Tente novamente.");
+                    btnEnviar.prop("disabled", false).html("<i class='fas fa-paper-plane'></i> Enviar Formulário");
+                });
+            });
+
+            // VALIDAÇÃO DATA NÃO FUTURA
+            $("#DtAcidente").on("change", function () {
+                let data = $(this).val();
+                let hoje = new Date().toISOString().split("T")[0];
+
+                if (data > hoje) {
+                    toastr.error("A data do acidente não pode ser futura.");
+                    $(this).val("");
+                    $(this).focus();
+                }
+            });
+        });
+    </script>
+}

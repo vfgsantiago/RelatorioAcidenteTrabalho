@@ -1,0 +1,33 @@
+﻿<footer class="app-footer bg-primary text-white pt-4 pb-2">
+    <div class="container-fluid align-items-center">
+        <div class="row g-3 px-3">
+            <div class="col-md-6 col-12">
+                <h5>
+                    <span class="fas fa-medkit me-2"></span>Relatório de Acidentes de Trabalho - RAT
+                </h5>
+                <p>Portal para registro de acidentes de trabalho.</p>
+            </div>
+            <div class="col-md-3 col-12 text-center text-md-start">
+                <h5 class="text-justify me-3">Links úteis</h5>
+                <ul class="list-unstyled d-flex">
+                    <li class="me-4">
+                        <a href="" class="text-white text-decoration-none">
+                            <span class="fas fa-home me-1"></span>
+                            Site externo
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Login" asp-action="EfetuarLoginAdmin" asp-area="Admin" class="text-decoration-none text-white">
+                            <span class="fas fa-user-lock me-1"></span>
+                            Administrador
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-3 col-12 text-md-end text-center">
+                <p>&copy; @DateTime.Now.Year Vinicius Santiago</p>
+                <p><small>Todos os direitos reservados</small></p>
+            </div>
+        </div>
+    </div>
+</footer>

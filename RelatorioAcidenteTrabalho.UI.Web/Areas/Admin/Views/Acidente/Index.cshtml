@@ -1,0 +1,306 @@
+﻿@model AcidenteViewMOD
+@{
+    ViewData["Title"] = "Acidentes Registrados";
+}
+
+<div class="container-fluid px-5 pt-3 pb-3 mb-4">
+    <div class="row mb-3">
+        <div class="col-12 text-start">
+            <a asp-action="Index" asp-controller="Home" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+                <i class="fas fa-home me-2"></i> Home
+            </a>       
+            <a asp-action="Index" asp-controller="Relatorio" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+                <i class="fas fa-chart-line me-2"></i>Relatórios
+            </a>  
+        </div>
+    </div>
+    <div class="bg-white rounded-3 mb-4 px-4 pt-4 pb-2 shadow-sm">
+        <form asp-action="Index" asp-controller="Acidente" asp-area="Admin" method="get" class="container-fluid mb-4">
+        <div class="row mb-3">
+            <div class="col-8 text-start">
+                <h3 class="text-gray-dark">
+                    <i class="fas fa-medkit me-2"></i>Acidentes Registrados
+                </h3>
+                <p class="text-gray">Consulta, filtros e paginação dos acidentes registrados.</p>
+            </div>
+            <div class="col-4 mt-3 text-end">
+                  <button class="btn bg-primary text-white btn-sm px-4 py-1" type="submit">
+                      <i class="fas fa-search me-2"></i>Buscar
+                  </button>
+                  <a href="@Url.Action("Index","Acidente", new { area = "Admin" })"
+                     class="btn btn-outline-green btn-sm px-4 py-1">
+                      <i class="fas fa-times me-2"></i>Limpar
+                  </a>
+              </div>
+        </div>
+           <div class="row g-2">
+              <div class="col-md-3 position-relative">
+                  <div class="input-group input-group-sm shadow-sm">
+                      <span class="input-group-text bg-white">
+                          <i class="fas fa-text-height"></i>
+                      </span>
+                      <div class="form-floating form-floating-sm flex-grow-1">
+                          <input type="text"
+                                 id="buscarTitulo"
+                                 class="form-control"
+                                 placeholder="Digite o título do acidente..."
+                                 value="@(ViewBag.Titulo ?? "")">
+                          <label class="text-muted">Título</label>
+                      </div>
+                      <input type="hidden" id="cdAcidente" name="cdAcidente"
+                             value="@ViewBag.Acidente" />
+                  </div>
+                  <div id="listaTitulos"
+                       class="list-group shadow-sm border rounded-2 mt-1 position-absolute w-100"
+                       style="display:none; max-height:250px; overflow-y:auto; z-index:9999;">
+                  </div>
+              </div>
+              <div class="col-md-3 position-relative">
+                  <div class="input-group input-group-sm shadow-sm">
+                      <span class="input-group-text bg-white">
+                          <i class="fas fa-user-injured"></i>
+                      </span>
+                      <div class="form-floating form-floating-sm flex-grow-1">
+                          <input type="text"
+                                 id="buscarAcidentado"
+                                 class="form-control"
+                                 placeholder="Digite nome ou matrícula..."
+                                 value="@(ViewBag.AcidentadoNome ?? "")">
+                          <label class="text-muted">Acidentado</label>
+                      </div>
+                      <input type="hidden" id="cdAcidentado" name="cdAcidentado"
+                             value="@ViewBag.Acidentado" />
+                  </div>
+                  <div id="listaAcidentados"
+                       class="list-group shadow-sm border rounded-2 mt-1 position-absolute w-100"
+                       style="display:none; max-height:250px; overflow-y:auto; z-index:9999;">
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="input-group input-group-sm shadow-sm">
+                      <span class="input-group-text bg-white">
+                          <i class="fas fa-exclamation-triangle"></i>
+                      </span>
+                      <div class="form-floating form-floating-sm">
+                          <select name="cdTipoAcidente" class="form-select">
+                              <option value="">Todos</option>
+                              @foreach (var tipo in ViewBag.ListaTipos ?? Enumerable.Empty<TipoAcidenteMOD>())
+                              {
+                                  <option value="@tipo.CdTipoAcidente"
+                                          selected="@(ViewBag.TipoAcidente == tipo.CdTipoAcidente)">
+                                      @tipo.TxTipoAcidente
+                                  </option>
+                              }
+                          </select>
+                          <label class="text-muted">Categoria</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="input-group input-group-sm shadow-sm">
+                      <span class="input-group-text bg-white">
+                          <i class="fas fa-calendar"></i>
+                      </span>
+                      <div class="form-floating form-floating-sm">
+                          <input type="date" name="dtInicioPeriodo" class="form-control"
+                                 value="@ViewBag.InicioPeriodo?.ToString("yyyy-MM-dd")" />
+                          <label class="text-muted">Início do Período</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="input-group input-group-sm shadow-sm">
+                      <span class="input-group-text bg-white">
+                          <i class="fas fa-calendar-check"></i>
+                      </span>
+                      <div class="form-floating form-floating-sm">
+                          <input type="date" name="dtFimPeriodo" class="form-control"
+                                 value="@ViewBag.FimPeriodo?.ToString("yyyy-MM-dd")" />
+                          <label class="text-muted">Fim do Período</label>
+                      </div>
+                  </div>
+              </div>
+            </div>
+        </form>
+    </div>
+    <div class="bg-white rounded-3 mb-5 px-4 pt-3 pb-2 shadow-sm">
+        <div class="mb-2">
+            <small class="text-gray">Total de acidentes: <strong>@Model.Paginacao.TotalItens</strong></small>
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-body table-responsive p-0">
+                <table class="table table-striped table-hover text-nowrap">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="bg-primary text-white">Registro</th>
+                            <th class="bg-primary text-white">Título</th>
+                            <th class="bg-primary text-white">Acidentado</th>
+                            <th class="bg-primary text-white">Acidente</th>
+                            <th class="bg-primary text-white">Categoria</th>
+                            <th class="bg-primary text-white text-center">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Lista != null && Model.Lista.Any())
+                        {
+                            foreach (var item in Model.Lista)
+                            {
+                                <tr>
+                                    <td>@item.DtRegistro.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.TxTitulo</td>
+                                    <td>@item.TxNome (@item.NrMatricula)</td>
+                                    <td>@item.DtAcidente.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center">
+                                        <span class="badge rounded-pill
+                                            @(item.CdTipoAcidente == 1 ? "bg-warning" :
+                                              item.CdTipoAcidente == 2 ? "bg-danger" :
+                                              "bg-orange")">
+                                            @item.TxTipoAcidente
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        @{
+                                            string cdAcidenteCriptografado = FuncaoCriptografia.Criptografar(item.CdAcidente.ToString());
+                                        }
+                                        <a asp-action="Detalhe" asp-controller="Acidente" asp-area="Admin"
+                                           asp-route-a="@cdAcidenteCriptografado">
+                                            <i class="fas fa-search fa-lg text-green me-3" title="Ver detalhes"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="fas fa-info-circle me-2"></i>Nenhum acidente encontrado.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.Paginacao.TotalPaginas; i++)
+            {
+                <li class="page-item @(i == Model.Paginacao.PaginaAtual ? "active" : "")">
+                    <a class="page-link bg-primary text-white border-0"
+                       href="@Url.Action("Index", new {
+                           pagina = i,
+                           cdAcidente = ViewBag.Acidente,
+                           cdTipoAcidente = ViewBag.TipoAcidente,
+                           cdAcidentado = ViewBag.Acidentado,
+                           dtInicioPeriodo = ViewBag.InicioPeriodo?.ToString("yyyy-MM-dd"),
+                           dtFimPeriodo = ViewBag.FimPeriodo?.ToString("yyyy-MM-dd")
+                       })">
+                        @i
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        // ACIDENTE
+        $(document).on("keyup", "#buscarTitulo", function () {
+            let titulo = $(this).val();
+    
+            if (titulo.length < 3) {
+                $("#listaTitulos").hide();
+                return;
+            }
+            $.get("@Url.Action("BuscarTitulos", "Acidente", new { area = "Admin" })",
+                { titulo: titulo },
+                function (resp) {
+                    if (!resp.sucesso || resp.titulos.length === 0) {
+                        $("#listaTitulos").hide();
+                        return;
+                    }
+    
+                    let html = "";
+                    resp.titulos.forEach(a => {
+                        html += `
+                            <a class="list-group-item list-group-item-action"
+                               data-id="${a.cdAcidente}"
+                               data-titulo="${a.txTitulo}"
+                                <strong>${a.txTitulo}</strong>
+                            </a>`;
+                    });
+    
+                    $("#listaTitulos").html(html).fadeIn(120);
+                }
+            );
+        });
+        $(document).on("click", "#listaTitulos .list-group-item", function () {
+            let id = $(this).data("id");
+            let titulo = $(this).data("titulo");
+    
+            $("#cdAcidente").val(id);
+            $("#buscarTitulo").val(titulo);
+    
+            $("#listaTitulos").fadeOut(100);
+        });
+        $(document).click(function (e) {
+            if (!$(e.target).closest("#buscarTitulo, #listaTitulos").length) {
+                $("#listaTitulos").fadeOut(100);
+            }
+        });
+
+        // ACIDENTADO
+        $(document).on("keyup", "#buscarAcidentado", function () {
+            let termo = $(this).val();
+    
+            if (termo.length < 3) {
+                $("#listaAcidentados").hide();
+                return;
+            }
+            $.get("@Url.Action("BuscarAcidentados", "Acidente", new { area = "Admin" })",
+                { termo: termo },
+                function (resp) {
+                    if (!resp.sucesso || resp.acidentados.length === 0) {
+                        $("#listaAcidentados").hide();
+                        return;
+                    }
+    
+                    let html = "";
+                    resp.acidentados.forEach(a => {
+                        html += `
+                            <a class="list-group-item list-group-item-action"
+                               data-id="${a.cdAcidentado}"
+                               data-nome="${a.txNome}"
+                               data-mat="${a.nrMatricula}">
+                                <strong>${a.txNome}</strong><br>
+                                <small>Matrícula: ${a.nrMatricula}</small>
+                            </a>`;
+                    });
+    
+                    $("#listaAcidentados").html(html).fadeIn(120);
+                }
+            );
+        });
+        $(document).on("click", "#listaAcidentados .list-group-item", function () {
+    
+            let id = $(this).data("id");
+            let nome = $(this).data("nome");
+            let mat = $(this).data("mat");
+    
+            $("#cdAcidentado").val(id);
+            $("#buscarAcidentado").val(nome + " (" + mat + ")");
+    
+            $("#listaAcidentados").fadeOut(100);
+        });
+        $(document).click(function (e) {
+            if (!$(e.target).closest("#buscarAcidentado, #listaAcidentados").length) {
+                $("#listaAcidentados").fadeOut(100);
+            }
+        });
+    });
+    </script>
+}

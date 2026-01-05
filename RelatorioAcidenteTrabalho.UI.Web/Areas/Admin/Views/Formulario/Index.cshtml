@@ -1,0 +1,41 @@
+﻿@model List<TipoAcidenteMOD>
+@{
+    ViewData["Title"] = "Parametrização de Formulário";
+}
+
+<div class="container-fluid px-5 pt-4 pb-3 mb-4">
+    <div class="mb-3">
+        <a asp-action="Index" asp-controller="Home" asp-area="Admin" class="btn btn-xs px-3 py-1 btn-outline-gray">
+            <i class="fas fa-chevron-left me-2"></i> Voltar
+        </a>
+    </div>
+    <div class="bg-white rounded-3 mb-4 px-4 pt-4 pb-0 shadow-sm">
+        <div class="row mb-3">
+            <div class="col-12 text-start mb-3">
+                <h3 class="text-gray-dark">
+                    <i class="fas fa-cogs me-2"></i>Categorias de Acidentes
+                </h3>
+                <p class="text-gray">Selecione uma das categorias para parametrização de formulário...</p>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        @foreach (var tipo in Model)
+        {
+            {
+                string cdTipoAcidenteCriptografado = FuncaoCriptografia.Criptografar(tipo.CdTipoAcidente.ToString());
+                
+                <div class="col-lg-4 col-md-6">
+                    <a asp-action="Hub" asp-asp-controller="Formulario" asp-area="Admin" asp-route-t="@cdTipoAcidenteCriptografado"
+                       class="small-box bg-primary shadow-sm d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4>@tipo.TxTipoAcidente</h4>
+                            <small>@tipo.TxDescricao</small>
+                        </div>
+                        <i class="fas fa-medkit"></i>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>
