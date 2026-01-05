@@ -2,9 +2,8 @@ using Mapster;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Razor;
 using RelatorioAcidenteTrabalho.UI.Web;
-using US.Intranet.RelatorioAcidenteTrabalho.UI.Web;
-using US.Intranet.RelatorioAcidenteTrabalho.UI.Web.Helpers;
-using US.Intranet.RelatorioAcidenteTrabalho.UI.Web.Services;
+using RelatorioAcidenteTrabalho.UI.Web.Helpers;
+using RelatorioAcidenteTrabalho.UI.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
